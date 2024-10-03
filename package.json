@@ -1,5 +1,5 @@
 {
-  "name": "node_utils",
+  "name": "@zhaihongbinv/node_utils",
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
