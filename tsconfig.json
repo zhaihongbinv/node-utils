@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es5", // 打包后的 JavaScript 版本
+    "module": "esnext", // 模块化方案
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "declaration": true // 生成 .d.ts 文件
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
