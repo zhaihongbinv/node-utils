@@ -20,6 +20,17 @@ const cleanDistPath = async () => {
   }
 };
 
+const outputOptions = [
+  {
+    file: path.resolve(outputPath, "index.cjs.js"), // 输出文件
+    format: "cjs", // 输出格式：amd、cjs、es、iife、umd
+  },
+  {
+    file: path.resolve(outputPath, "index.esm.js"), // 输出文件
+    format: "es", // 输出格式：amd、cjs、es、iife、umd
+  },
+];
+
 const build = async () => {
   try {
     cleanDistPath();
@@ -35,10 +46,7 @@ const build = async () => {
       ],
     });
 
-    await bundle.write({
-      dir: outputPath, // 输出文件
-      format: "cjs", // 输出格式：amd、cjs、es、iife、umd
-    });
+    await Promise.all(outputOptions.map(bundle.write));
 
     await bundle.close();
   } catch (error) {

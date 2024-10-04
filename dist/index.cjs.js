@@ -36,18 +36,26 @@ typeof SuppressedError === "function" ? SuppressedError : function (error, suppr
 };
 
 var childProcessSpawn = function (command, args, options) {
-    if (options === void 0) { options = { output: true }; }
-    var cp = node_child_process.spawn(command, args, __assign(__assign({ cwd: process.cwd() }, options), { stdio: [process.stdin, "pipe", process.stderr], shell: true }));
-    if (options.output) {
-        var buffers_1 = [];
-        cp.stdout.on("data", buffers_1.push);
-        cp.on("close", function (code) {
-            console.log("-- child process start --");
-            console.log("child process exited with code", code);
-            console.log("stdout: ", Buffer.concat(buffers_1).toString("utf-8").trim());
-            console.log("-- child process end --");
+    if (options === void 0) { options = { log: false }; }
+    return new Promise(function (resolve, reject) {
+        var cp = node_child_process.spawn(command, args, __assign(__assign({ cwd: process.cwd() }, options), { stdio: [process.stdin, "pipe", process.stderr], shell: true }));
+        cp.on("error", function (err) {
+            console.error("child process error", err);
+            reject(err);
         });
-    }
+        cp.on("close", function (code) {
+            var result = Buffer.concat(buffers).toString("utf-8").trim();
+            resolve(result);
+            if (options.log) {
+                console.log("-- child process start --");
+                console.log("child process exited with code", code);
+                console.log("stdout: ", result);
+                console.log("-- child process end --");
+            }
+        });
+        var buffers = [];
+        cp.stdout.on("data", function (chunk) { return buffers.push(chunk); });
+    });
 };
 
 exports.childProcessSpawn = childProcessSpawn;
